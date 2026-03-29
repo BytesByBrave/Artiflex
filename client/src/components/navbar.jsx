@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Hexagon } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { cn } from "../lib/utils";
+import logo from "../assets/Artiflex-Design-logo-png.png";
 
 export const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -35,20 +36,17 @@ export const Navbar = () => {
         <nav
           className={cn(
             "flex items-center justify-between rounded-full px-6 py-4",
-            isScrolled ? "glass-dark shadow-2xl" : "bg-transparent"
+            isScrolled ? "glass-dark" : "bg-transparent"
           )}
         >
           {/* Logo */}
-          <a href="/" className="flex items-center gap-2 group">
+          <a href="/" className="flex items-center group">
             <motion.div
-              whileHover={{ rotate: 90 }}
-              transition={{ duration: 0.5 }}
+              whileHover={{ scale: 1.05 }}
+              transition={{ duration: 0.3 }}
             >
-              <Hexagon className="w-8 h-8 text-purple-500" />
+              <img src={logo} alt="Artiflix Designs" className="h-10 w-auto" />
             </motion.div>
-            <span className="text-xl font-bold tracking-tight text-white group-hover:text-purple-400 transition-colors">
-              Artiflix
-            </span>
           </a>
 
           {/* Desktop Nav */}
@@ -57,10 +55,10 @@ export const Navbar = () => {
               <li key={link.name}>
                 <a
                   href={link.href}
-                  className="text-sm font-medium text-gray-300 hover:text-white transition-colors relative group py-2"
+                  className="text-sm font-bold text-[#10367d]/70 hover:text-[#10367d] transition-colors relative group py-2"
                 >
                   {link.name}
-                  <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-500 transition-all duration-300 group-hover:w-full"></span>
+                  <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-accent transition-all duration-300 group-hover:w-full"></span>
                 </a>
               </li>
             ))}
@@ -71,7 +69,7 @@ export const Navbar = () => {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="px-6 py-2.5 rounded-full bg-white text-black font-semibold text-sm hover:bg-gray-200 transition-colors"
+              className="px-6 py-2.5 rounded-full bg-[#10367d] text-white font-bold text-sm hover:bg-accent transition-colors shadow-md shadow-[#10367d]/20"
             >
               Contact Us
             </motion.button>
@@ -79,7 +77,7 @@ export const Navbar = () => {
 
           {/* Mobile Menu Toggle */}
           <button
-            className="md:hidden text-white p-2"
+            className="md:hidden text-[#10367d] p-2"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             {mobileMenuOpen ? <X /> : <Menu />}
@@ -97,19 +95,19 @@ export const Navbar = () => {
             transition={{ duration: 0.3 }}
             className="absolute top-full left-0 right-0 p-4 md:hidden"
           >
-            <div className="glass-dark rounded-2xl p-6 flex flex-col gap-4 shadow-2xl">
+            <div className="glass-dark rounded-2xl p-6 flex flex-col gap-4 shadow-xl">
               {navLinks.map((link) => (
                 <a
                   key={link.name}
                   href={link.href}
-                  className="text-lg font-medium text-gray-300 hover:text-white transition-colors"
+                  className="text-lg font-bold text-[#10367d]/80 hover:text-[#10367d] transition-colors"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {link.name}
                 </a>
               ))}
-              <hr className="border-gray-800 my-2" />
-              <button className="px-6 py-3 w-full rounded-xl bg-purple-600 text-white font-semibold text-md hover:bg-purple-700 transition-colors">
+              <hr className="border-[#10367d]/10 my-2" />
+              <button className="px-6 py-3 w-full rounded-xl bg-[#10367d] text-white font-bold text-md hover:bg-accent transition-colors shadow-md">
                 Contact Us
               </button>
             </div>

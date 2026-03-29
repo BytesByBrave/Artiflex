@@ -3,19 +3,19 @@
 @theme {
   --font-sans: "Outfit", "Inter", sans-serif;
   
-  --color-background: #030303;
-  --color-foreground: #ffffff;
+  --color-background: #ebebeb;
+  --color-foreground: #10367d;
   
-  --color-primary: #6d28d9;
+  --color-primary: #10367d;
   --color-primary-foreground: #ffffff;
   
-  --color-accent: #a855f7;
-  --color-accent-foreground: #ffffff;
+  --color-accent: #74b4da;
+  --color-accent-foreground: #10367d;
 }
 
 @layer base {
   * {
-    @apply border-gray-800;
+    @apply border-gray-300;
   }
   body {
     @apply bg-background text-foreground antialiased font-sans overflow-x-hidden;
@@ -25,12 +25,12 @@
 /* Custom Utilities for Glassmorphism & 3D Web aesthetics */
 @layer utilities {
   .glass {
-    @apply bg-white/5 backdrop-blur-md border border-white/10;
+    @apply bg-white/60 backdrop-blur-md border border-white/40;
   }
   .glass-dark {
-    @apply bg-black/40 backdrop-blur-xl border border-white/5;
+    @apply bg-white/80 backdrop-blur-xl border border-white/50 shadow-xl;
   }
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-white via-purple-200 to-purple-600;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-[#10367d] via-[#74b4da] to-[#cdeee7];
   }
 }
