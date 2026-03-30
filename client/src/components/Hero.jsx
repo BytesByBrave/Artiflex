@@ -62,7 +62,7 @@ export const Hero = () => {
         </p>
         
         <div ref={btnRef} className="flex flex-col sm:flex-row gap-4 pointer-events-auto">
-          <button className="px-8 py-4 rounded-full bg-[#10367d] hover:bg-[#74b4da] text-white font-bold text-lg transition-all hover:scale-105 active:scale-95 shadow-[0_10px_30px_rgba(16,54,125,0.25)]">
+          <button className="px-8 py-4 rounded-full bg-[#10367d] hover:bg-accent text-white font-bold text-lg transition-all hover:scale-105 active:scale-95 shadow-[0_10px_30px_rgba(16,54,125,0.25)]">
             Explore Our Work
           </button>
           <button className="px-8 py-4 rounded-full glass hover:bg-white/80 text-[#10367d] font-bold text-lg transition-all hover:scale-105 active:scale-95 border border-[#10367d]/10 shadow-sm">
