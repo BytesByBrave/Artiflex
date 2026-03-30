@@ -35,7 +35,7 @@ const ProcessStep = ({ step, index }) => {
 
       {/* Image Content */}
       <div className="flex-1 w-full">
-        <div className="relative w-full aspect-square md:aspect-[4/3] rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(16,54,125,0.1)] group">
+        <div className="relative w-full aspect-square md:aspect-4/3 rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(16,54,125,0.1)] group">
           <div className="absolute inset-0 bg-[#000000]/10 group-hover:bg-transparent transition-colors duration-500 z-10 pointer-events-none"></div>
           <img 
             src={step.image} 
