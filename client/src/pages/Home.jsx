@@ -3,6 +3,7 @@ import Navbar from '../components/navbar.jsx'
 import Hero from '../components/Hero.jsx'
 import Process from '../components/Process.jsx'
 import WhyChooseUs from '../components/WhyChooseUs.jsx'
+import Footer from '../components/Footer.jsx'
 
 const Home = () => {
   return (
@@ -11,6 +12,7 @@ const Home = () => {
       <Hero />
       <Process />
       <WhyChooseUs />
+      <Footer />
     </main>
   )
 }
