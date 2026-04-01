@@ -34,7 +34,7 @@ export const Hero = () => {
       {/* 3D Canvas Background */}
       <div className="absolute inset-0 z-0 opacity-100 pointer-events-none">
         <LiquidEther
-          colors={['#5227FF', '#FF9FFC', '#B19EEF']}
+          colors={['#10367d', '#10367d', '#74b4da', '#10367d']}
           mouseForce={30}
           cursorSize={100}
           isViscous
