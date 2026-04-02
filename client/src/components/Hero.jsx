@@ -1,8 +1,6 @@
 import React, { useEffect, useRef } from "react";
-import { Canvas } from "@react-three/fiber";
-import { Environment } from "@react-three/drei";
 import gsap from "gsap";
-import { AbstractShape } from "./AbstractShape";
+import LiquidEther from "./LiquidEther";
 
 export const Hero = () => {
   const headingRef = useRef(null);
@@ -35,13 +33,23 @@ export const Hero = () => {
     <section className="relative w-full h-screen flex items-center justify-center pt-20">
       {/* 3D Canvas Background */}
       <div className="absolute inset-0 z-0 opacity-100 pointer-events-none">
-        <Canvas camera={{ position: [0, 0, 8], fov: 45 }}>
-          <ambientLight intensity={1.5} color="#ffffff" />
-          <directionalLight position={[10, 10, 5]} intensity={2.5} color="#ffffff" />
-          <spotLight position={[-10, 10, 10]} angle={0.3} penumbra={1} intensity={2} color="#cdeee7" />
-          <AbstractShape />
-          <Environment preset="city" />
-        </Canvas>
+        <LiquidEther
+          colors={['#10367d', '#cdeee7', '#74b4da', '#ebebeb', '#10367d']}
+          mouseForce={80}
+          cursorSize={150}
+          isViscous
+          viscous={15}
+          iterationsViscous={32}
+          iterationsPoisson={32}
+          resolution={1.0}
+          isBounce={true}
+          autoDemo
+          autoSpeed={1.5}
+          autoIntensity={4.5}
+          takeoverDuration={0.2}
+          autoResumeDelay={1500}
+          autoRampDuration={0.8}
+        />
       </div>
 
       {/* Content */}
