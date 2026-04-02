@@ -34,18 +34,18 @@ export const Hero = () => {
       {/* 3D Canvas Background */}
       <div className="absolute inset-0 z-0 opacity-100 pointer-events-none">
         <LiquidEther
-          colors={['#10367d', '#10367d', '#74b4da', '#10367d']}
-          mouseForce={30}
-          cursorSize={100}
+          colors={['#10367d', '#0a2861', '#74b4da', '#10367d']}
+          mouseForce={50}
+          cursorSize={120}
           isViscous
           viscous={30}
           iterationsViscous={32}
           iterationsPoisson={32}
-          resolution={0.5}
+          resolution={0.8}
           isBounce={false}
           autoDemo
-          autoSpeed={0.5}
-          autoIntensity={2.2}
+          autoSpeed={1.0}
+          autoIntensity={3.5}
           takeoverDuration={0.25}
           autoResumeDelay={3000}
           autoRampDuration={0.6}
