@@ -14,25 +14,25 @@ const Footer = () => {
             ARTIFLIX
           </div>
           <div className="flex items-center gap-6">
-            <a href="#" className="text-white/60 hover:text-white hover:scale-110 transition-all">
+            <a href="#" aria-label="LinkedIn" className="text-white/60 hover:text-white hover:scale-110 transition-all">
               <FaLinkedin className="w-5 h-5" />
             </a>
-            <a href="#" className="text-white/60 hover:text-white hover:scale-110 transition-all">
+            <a href="#" aria-label="WhatsApp" className="text-white/60 hover:text-white hover:scale-110 transition-all">
               <FaWhatsapp className="w-5 h-5" />
             </a>
-            <a href="#" className="text-white/60 hover:text-white hover:scale-110 transition-all">
+            <a href="#" aria-label="Instagram" className="text-white/60 hover:text-white hover:scale-110 transition-all">
               <FaInstagram className="w-5 h-5" />
             </a>
-            <a href="#" className="text-white/60 hover:text-white hover:scale-110 transition-all">
+            <a href="#" aria-label="Facebook" className="text-white/60 hover:text-white hover:scale-110 transition-all">
               <FaFacebookF className="w-5 h-5" />
             </a>
-            <a href="#" className="text-white/60 hover:text-white hover:scale-110 transition-all">
+            <a href="#" aria-label="TikTok" className="text-white/60 hover:text-white hover:scale-110 transition-all">
               <FaTiktok className="w-5 h-5" />
             </a>
-            <a href="#" className="text-white/60 hover:text-white hover:scale-110 transition-all">
+            <a href="#" aria-label="Pinterest" className="text-white/60 hover:text-white hover:scale-110 transition-all">
               <FaPinterestP className="w-5 h-5" />
             </a>
-            <a href="#" className="text-white/60 hover:text-white hover:scale-110 transition-all">
+            <a href="#" aria-label="YouTube" className="text-white/60 hover:text-white hover:scale-110 transition-all">
               <FaYoutube className="w-5 h-5" />
             </a>
           </div>
