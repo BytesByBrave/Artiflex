@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { FaLinkedin, FaYoutube, FaInstagram, FaFacebookF, FaTiktok, FaPinterestP, FaWhatsapp } from "react-icons/fa6";
 
 const Footer = () => {
@@ -14,25 +15,25 @@ const Footer = () => {
             ARTIFLIX
           </div>
           <div className="flex items-center gap-6">
-            <a href="#" className="text-white/60 hover:text-white hover:scale-110 transition-all">
+            <a href="#" aria-label="LinkedIn" className="text-white/60 hover:text-white hover:scale-110 transition-all">
               <FaLinkedin className="w-5 h-5" />
             </a>
-            <a href="#" className="text-white/60 hover:text-white hover:scale-110 transition-all">
+            <a href="#" aria-label="WhatsApp" className="text-white/60 hover:text-white hover:scale-110 transition-all">
               <FaWhatsapp className="w-5 h-5" />
             </a>
-            <a href="#" className="text-white/60 hover:text-white hover:scale-110 transition-all">
+            <a href="#" aria-label="Instagram" className="text-white/60 hover:text-white hover:scale-110 transition-all">
               <FaInstagram className="w-5 h-5" />
             </a>
-            <a href="#" className="text-white/60 hover:text-white hover:scale-110 transition-all">
+            <a href="#" aria-label="Facebook" className="text-white/60 hover:text-white hover:scale-110 transition-all">
               <FaFacebookF className="w-5 h-5" />
             </a>
-            <a href="#" className="text-white/60 hover:text-white hover:scale-110 transition-all">
+            <a href="#" aria-label="TikTok" className="text-white/60 hover:text-white hover:scale-110 transition-all">
               <FaTiktok className="w-5 h-5" />
             </a>
-            <a href="#" className="text-white/60 hover:text-white hover:scale-110 transition-all">
+            <a href="#" aria-label="Pinterest" className="text-white/60 hover:text-white hover:scale-110 transition-all">
               <FaPinterestP className="w-5 h-5" />
             </a>
-            <a href="#" className="text-white/60 hover:text-white hover:scale-110 transition-all">
+            <a href="#" aria-label="YouTube" className="text-white/60 hover:text-white hover:scale-110 transition-all">
               <FaYoutube className="w-5 h-5" />
             </a>
           </div>
@@ -43,19 +44,20 @@ const Footer = () => {
           {/* Col 1 */}
           <div className="flex flex-col space-y-5">
             <h4 className="font-bold text-white mb-2 tracking-wide">Services</h4>
-            <a href="#" className="text-white/60 hover:text-[#cdeee7] transition-colors">3D Animation</a>
-            <a href="#" className="text-white/60 hover:text-[#cdeee7] transition-colors">Motion Graphics</a>
-            <a href="#" className="text-white/60 hover:text-[#cdeee7] transition-colors">UI/UX Design</a>
-            <a href="#" className="text-white/60 hover:text-[#cdeee7] transition-colors">Branding</a>
-            <a href="#" className="text-white/60 hover:text-[#cdeee7] transition-colors">Illustration</a>
+            <Link to="/services" className="text-white/60 hover:text-[#cdeee7] transition-colors">3D Animation</Link>
+            <Link to="/services" className="text-white/60 hover:text-[#cdeee7] transition-colors">Motion Graphics</Link>
+            <Link to="/services" className="text-white/60 hover:text-[#cdeee7] transition-colors">UI/UX Design</Link>
+            <Link to="/services" className="text-white/60 hover:text-[#cdeee7] transition-colors">Branding</Link>
+            <Link to="/services" className="text-white/60 hover:text-[#cdeee7] transition-colors">Illustration</Link>
           </div>
 
           {/* Col 2 */}
           <div className="flex flex-col space-y-5">
             <h4 className="font-bold text-white mb-2 tracking-wide">Company</h4>
-            <a href="#" className="text-white/60 hover:text-[#cdeee7] transition-colors">About Us</a>
-            <a href="#" className="text-white/60 hover:text-[#cdeee7] transition-colors">Our Process</a>
-            <a href="#" className="text-white/60 hover:text-[#cdeee7] transition-colors">Portfolio</a>
+            <Link to="/#about" className="text-white/60 hover:text-[#cdeee7] transition-colors">About Us</Link>
+            <Link to="/#process" className="text-white/60 hover:text-[#cdeee7] transition-colors">Our Process</Link>
+            <Link to="/portfolio" className="text-white/60 hover:text-[#cdeee7] transition-colors">Portfolio</Link>
+            <Link to="/pricing" className="text-white/60 hover:text-[#cdeee7] transition-colors">Pricing</Link>
             <a href="#" className="text-white/60 hover:text-[#cdeee7] transition-colors">Careers</a>
             <a href="#" className="text-white/60 hover:text-[#cdeee7] transition-colors">FAQ</a>
           </div>
