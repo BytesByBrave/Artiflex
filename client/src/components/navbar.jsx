@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { cn } from "../lib/utils";
@@ -17,9 +18,10 @@ export const Navbar = () => {
   }, []);
 
   const navLinks = [
-    { name: "Services", href: "#services" },
-    { name: "Work", href: "#work" },
-    { name: "About", href: "#about" },
+    { name: "Services", href: "/services" },
+    { name: "Pricing", href: "/pricing" },
+    { name: "Portfolio", href: "/portfolio" },
+    { name: "About", href: "/#about" },
   ];
 
   return (
@@ -40,26 +42,26 @@ export const Navbar = () => {
           )}
         >
           {/* Logo */}
-          <a href="/" className="flex items-center group">
+          <Link to="/" className="flex items-center group">
             <motion.div
               whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.3 }}
             >
               <img src={logo} alt="Artiflix Designs" className="h-10 w-auto" />
             </motion.div>
-          </a>
+          </Link>
 
           {/* Desktop Nav */}
           <ul className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
               <li key={link.name}>
-                <a
-                  href={link.href}
+                <Link
+                  to={link.href}
                   className="text-sm font-bold text-[#10367d]/70 hover:text-[#10367d] transition-colors relative group py-2"
                 >
                   {link.name}
                   <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-accent transition-all duration-300 group-hover:w-full"></span>
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
@@ -97,14 +99,14 @@ export const Navbar = () => {
           >
             <div className="glass-dark rounded-2xl p-6 flex flex-col gap-4 shadow-xl">
               {navLinks.map((link) => (
-                <a
+                <Link
                   key={link.name}
-                  href={link.href}
+                  to={link.href}
                   className="text-lg font-bold text-[#10367d]/80 hover:text-[#10367d] transition-colors"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {link.name}
-                </a>
+                </Link>
               ))}
               <hr className="border-[#10367d]/10 my-2" />
               <button className="px-6 py-3 w-full rounded-xl bg-[#10367d] text-white font-bold text-md hover:bg-accent transition-colors shadow-md">

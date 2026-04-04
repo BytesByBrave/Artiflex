@@ -31,7 +31,7 @@ export const Hero = () => {
 
   return (
     <section className="relative w-full h-screen flex items-center justify-center pt-20">
-      {/* 3D Canvas Background */}
+w      {/* 3D Canvas Background */}
       <div className="absolute inset-0 z-0 opacity-100 pointer-events-none">
         <LiquidEther
           colors={['#10367d', '#cdeee7', '#74b4da', '#ebebeb', '#10367d']}
