@@ -1,175 +1,225 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Layers, Monitor, PenTool, Box, Zap, Heart } from 'lucide-react';
+import React, { useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Layers, Monitor, PenTool, Box, Zap, Heart, ArrowRight } from 'lucide-react';
 import Navbar from '../components/navbar';
 import Footer from '../components/Footer';
 import LiquidEther from '../components/LiquidEther';
+import ServiceIcon3D from '../components/ServiceIcon3D';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const ServiceCard = ({ service, index }) => {
+  const cardRef = useRef(null);
+  const icon3DRef = useRef(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        cardRef.current,
+        { opacity: 0, y: 50, scale: 0.95 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 1,
+          ease: "expo.out",
+          scrollTrigger: {
+            trigger: cardRef.current,
+            start: "top 85%",
+            toggleActions: "play none none reverse"
+          }
+        }
+      );
+    }, cardRef);
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
-      className="glass p-8 rounded-3xl hover:shadow-2xl transition-all duration-500 group border border-white/20 relative overflow-hidden h-full flex flex-col"
+    <div
+      ref={cardRef}
+      className="glass group p-10 rounded-[3.5rem] border border-white/40 hover:border-accent/40 transition-all duration-700 hover:shadow-[0_40px_80px_rgba(16,54,125,0.15)] flex flex-col h-full relative overflow-hidden"
     >
-      <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
-        <service.icon size={120} />
+      {/* 3D Icon Background Decor */}
+      <div className="absolute -top-20 -right-20 w-64 h-64 opacity-10 group-hover:opacity-25 transition-opacity duration-700 pointer-events-none">
+        <ServiceIcon3D type={service.type} color="#10367d" />
+      </div>
+
+      <div className="w-24 h-24 rounded-3xl bg-primary/5 flex items-center justify-center mb-10 group-hover:scale-110 group-hover:bg-primary group-hover:text-white transition-all duration-500 shadow-sm overflow-hidden">
+        <ServiceIcon3D type={service.type} color="#10367d" />
       </div>
       
-      <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
-        <service.icon size={32} />
-      </div>
-      
-      <h3 className="text-2xl font-black text-primary mb-4">{service.title}</h3>
-      <p className="text-primary/70 font-medium leading-relaxed mb-6 flex-grow">
+      <h3 className="text-3xl font-black text-primary mb-6 tracking-tight uppercase group-hover:text-accent transition-colors">
+        {service.title}
+      </h3>
+      <p className="text-primary/70 font-bold leading-relaxed text-lg mb-10 flex-grow uppercase tracking-tight">
         {service.description}
       </p>
       
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-3 mb-8">
         {service.tags.map((tag) => (
-          <span key={tag} className="px-3 py-1 bg-accent/10 text-accent text-xs font-bold rounded-full uppercase tracking-wider">
+          <span key={tag} className="px-5 py-2 bg-accent/10 text-accent text-xs font-black rounded-full uppercase tracking-widest border border-accent/20">
             {tag}
           </span>
         ))}
       </div>
-    </motion.div>
+
+      <button className="flex items-center gap-2 text-primary font-black uppercase text-sm group-hover:gap-4 transition-all">
+        Learn More <ArrowRight size={18} />
+      </button>
+    </div>
   );
 };
 
 const Services = () => {
+  const containerRef = useRef(null);
+  
   const services = [
     {
       title: "3D Animation",
-      description: "Bringing life to your concepts with high-end 3D character animation and product visualization that captivates your audience.",
+      description: "Bringing life to your concepts with high-end 3D character animation and product visualization.",
       icon: Box,
-      tags: ["Modeling", "Rigging", "Rendering", "VFX"],
+      type: "3d",
+      tags: ["Modeling", "Rigging", "VFX"],
       image: "/images/services_3d.png"
     },
     {
       title: "UI/UX Design",
-      description: "Creating intuitive, user-centric interfaces that blend stunning aesthetics with seamless functionality for web and mobile apps.",
+      description: "Creating intuitive interfaces that blend stunning aesthetics with seamless functionality.",
       icon: Monitor,
-      tags: ["Wireframing", "Prototyping", "Interaction", "Testing"],
+      type: "uiux",
+      tags: ["Prototyping", "Interaction", "Design Systems"],
       image: "/images/services_uiux.png"
     },
     {
       title: "Branding & Identity",
-      description: "Crafting a unique voice and visual language for your brand that resonates with your values and stands out in the marketplace.",
+      description: "Crafting a unique voice and visual language for your brand that resonates with your values.",
       icon: PenTool,
-      tags: ["Logo", "Typography", "Strategy", "Guidelines"],
+      type: "branding",
+      tags: ["Logo", "Typography", "Strategy"],
       image: "/images/services_branding.png"
     },
     {
       title: "Motion Graphics",
-      description: "Dynamic storytelling through animated graphics, typography, and visual effects that give your brand a modern edge.",
+      description: "Dynamic storytelling through animated graphics and visual effects that give your brand an edge.",
       icon: Zap,
-      tags: ["Explainer Videos", "Lottie", "Title Design"],
-      image: "/images/services_3d.png" // Reusing or could use another
+      type: "motion",
+      tags: ["Explainer Videos", "Lottie", "2D Animation"],
+      image: "/images/services_3d.png"
     },
     {
-      title: "Artistic Illustration",
-      description: "Bespoke digital illustrations tailored to your brand's unique character, from editorial pieces to custom character designs.",
+      title: "Digital Art",
+      description: "Bespoke digital illustrations and concept art tailored to your brand's unique character.",
       icon: Layers,
-      tags: ["Vector Art", "Concept Art", "Digital Painting"],
+      type: "art",
+      tags: ["Vector", "Concept", "Painting"],
       image: "/images/services_branding.png"
     },
     {
-      title: "Digital Marketing",
-      description: "Strategic design for social media and advertising campaigns that drive engagement and convert viewers into loyal customers.",
+      title: "Growth Design",
+      description: "Strategic design for marketing campaigns that drive engagement and convert viewers.",
       icon: Heart,
-      tags: ["Social Content", "Ads", "Email Design"],
+      type: "marketing",
+      tags: ["Social", "Ads", "Conversion"],
       image: "/images/services_uiux.png"
     }
   ];
 
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.from(".services-header > *", {
+        y: 60,
+        opacity: 0,
+        duration: 1.2,
+        stagger: 0.25,
+        ease: "expo.out",
+        scrollTrigger: {
+          trigger: ".services-header",
+          start: "top 80%"
+        }
+      });
+    }, containerRef);
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <div className="min-h-screen bg-background relative overflow-hidden flex flex-col">
+    <div ref={containerRef} className="min-h-screen bg-background relative overflow-hidden flex flex-col">
       <Navbar />
       
       {/* Background Effect */}
       <div className="fixed inset-0 z-0 pointer-events-none opacity-40">
-        <LiquidEther colors={['#10367d', '#74b4da', '#cdeee7']} />
+        <LiquidEther colors={['#10367d', '#74b4da', '#cdeee7']} autoIntensity={2} autoSpeed={1} />
       </div>
 
-      <main className="relative z-10 flex-grow pt-32 pb-20">
+      <main className="relative z-10 flex-grow pt-40 pb-40">
         <div className="max-w-7xl mx-auto px-6">
           
-          {/* Hero Section */}
-          <section className="mb-24 text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-            >
-              <h1 className="text-5xl md:text-8xl font-black tracking-tighter mb-8 text-primary uppercase">
-                Expert <span className="text-gradient">Design</span><br />Solutions
-              </h1>
-              <p className="text-xl md:text-2xl text-primary/60 font-medium max-w-3xl mx-auto leading-relaxed uppercase tracking-wide">
-                We blend technical precision with artistic flair to deliver designs that don't just look good, but drive results.
-              </p>
-            </motion.div>
+          {/* Header Section */}
+          <section className="services-header mb-32 text-center md:max-w-4xl mx-auto">
+            <span className="text-accent font-black tracking-[0.4em] uppercase text-sm mb-6 block">Elite Creative Solutions</span>
+            <h1 className="text-6xl md:text-9xl font-black tracking-tighter mb-10 leading-none text-primary uppercase">
+              EXPERT <span className="text-gradient">DESIGN</span><br />SYNTHESIS
+            </h1>
+            <p className="text-xl md:text-2xl text-primary/60 font-bold max-w-3xl mx-auto uppercase tracking-wide leading-relaxed">
+              We blend technical precision with artistic flair to deliver results that transcend the ordinary.
+            </p>
           </section>
 
           {/* Featured Service Detail */}
-          <section className="mb-32">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-              <motion.div
-                initial={{ opacity: 0, x: -50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8 }}
-                className="order-2 md:order-1"
-              >
-                <h2 className="text-4xl md:text-6xl font-black text-primary mb-6 uppercase tracking-tighter leading-none">
-                  Next-Level <br/><span className="text-accent">3D Experiences</span>
+          <section className="mb-48">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+              <div className="order-2 lg:order-1">
+                <span className="text-accent font-black tracking-widest text-xs uppercase mb-4 block">Core Competency</span>
+                <h2 className="text-5xl md:text-7xl font-black text-primary mb-10 uppercase tracking-tighter leading-[0.85]">
+                  Next-Level <br/><span className="text-gradient">3D Worlds</span>
                 </h2>
-                <p className="text-lg md:text-xl text-primary/70 mb-8 font-medium">
+                <p className="text-xl text-primary/70 mb-12 font-bold uppercase tracking-tight leading-relaxed">
                   Our specialized 3D department pushes the boundaries of digital reality. From photorealistic product renders to complex character animations, we bring a cinematic quality to every frame.
                 </p>
-                <ul className="space-y-4 mb-10">
-                  {['Photorealistic Texturing', 'Dynamic Particle Systems', 'Cinematic Camera Work'].map((item) => (
-                    <li key={item} className="flex items-center gap-3 text-primary font-bold">
-                      <div className="w-2 h-2 bg-accent rounded-full" />
-                      {item}
-                    </li>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                  {[
+                    { t: 'Photorealistic Rendering', d: 'Industrial grade lighting' },
+                    { t: 'Dynamic Particles', d: 'Physics-based simulations' },
+                    { t: 'Cinematic Motion', d: 'High-end camera pathing' },
+                    { t: 'Material Synthesis', d: 'Complex shader development' }
+                  ].map((item) => (
+                    <div key={item.t} className="flex gap-4">
+                      <div className="w-1.5 h-auto bg-accent rounded-full" />
+                      <div>
+                        <h4 className="text-primary font-black uppercase text-sm mb-1">{item.t}</h4>
+                        <p className="text-primary/50 text-xs font-bold uppercase">{item.d}</p>
+                      </div>
+                    </div>
                   ))}
-                </ul>
-                <button className="px-10 py-4 rounded-full bg-primary text-white font-black text-lg hover:bg-accent transition-all hover:scale-105 shadow-xl shadow-primary/20">
+                </div>
+                <button className="px-12 py-5 rounded-full bg-primary text-white font-black text-xl hover:bg-accent transition-all hover:scale-110 shadow-2xl shadow-primary/20 uppercase tracking-tight">
                   View Case Studies
                 </button>
-              </motion.div>
+              </div>
               
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8 }}
-                className="order-1 md:order-2"
-              >
-                <div className="relative rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white">
-                   <img 
-                    src="/images/services_3d.png" 
-                    alt="3D Animation Artiflex" 
-                    className="w-full h-full object-cover"
-                   />
-                   <div className="absolute inset-0 bg-gradient-to-t from-primary/30 to-transparent" />
-                </div>
-              </motion.div>
+              <div className="order-1 lg:order-2 relative aspect-square">
+                 <div className="absolute inset-0 bg-accent/20 rounded-[4rem] rotate-6" />
+                 <div className="absolute inset-0 bg-primary/10 rounded-[4rem] -rotate-3" />
+                 <div className="relative h-full w-full rounded-[4rem] overflow-hidden shadow-2xl border-8 border-white/20">
+                    <img 
+                      src="/images/services_3d.png" 
+                      alt="3D Animation Artiflex" 
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-primary/60 to-transparent" />
+                 </div>
+              </div>
             </div>
           </section>
 
           {/* Services Grid */}
-          <section className="mb-32">
-            <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
-              <div className="max-w-2xl">
-                <h2 className="text-3xl md:text-5xl font-black text-primary uppercase tracking-tighter">Full Service Creative Agency</h2>
-                <p className="text-lg text-primary/60 font-bold mt-4 uppercase">From Concept to Creation, we've got you covered.</p>
-              </div>
+          <section className="mb-48">
+            <div className="text-center mb-24">
+              <h2 className="text-4xl md:text-6xl font-black text-primary uppercase tracking-tighter mb-6">Full Spectrum Creation</h2>
+              <p className="text-xl text-primary/60 font-bold uppercase tracking-widest">From conceptual spark to final deployment.</p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
               {services.map((service, index) => (
                 <ServiceCard key={service.title} service={service} index={index} />
               ))}
@@ -177,21 +227,22 @@ const Services = () => {
           </section>
 
           {/* Call to Action */}
-          <section className="relative py-24 rounded-[4rem] bg-primary text-white overflow-hidden text-center">
+          <section className="relative py-32 rounded-[5rem] bg-primary text-white overflow-hidden text-center shadow-3xl">
             <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
+            <div className="absolute top-0 right-0 w-96 h-96 opacity-10 blur-3xl bg-accent rounded-full -translate-y-1/2 translate-x-1/2" />
             <div className="relative z-10 px-6">
-              <h2 className="text-4xl md:text-7xl font-black uppercase tracking-tighter mb-8 leading-none">
-                Start Your <br/>Digital Transformation
+              <h2 className="text-5xl md:text-8xl font-black uppercase tracking-tighter mb-10 leading-none">
+                Ignite Your <br/><span className="text-accent underline decoration-white/20">Vision</span>
               </h2>
-              <p className="text-xl md:text-2xl text-white/70 max-w-2xl mx-auto mb-12 font-medium">
-                Join forces with Artiflex and let's create something extraordinary together.
+              <p className="text-xl md:text-3xl text-white/70 max-w-3xl mx-auto mb-16 font-medium uppercase tracking-[0.2em]">
+                Join the vanguard of digital transformation.
               </p>
-              <div className="flex flex-col sm:flex-row gap-6 justify-center">
-                <button className="px-12 py-5 rounded-full bg-white text-primary font-black text-xl hover:bg-accent hover:text-white transition-all hover:-translate-y-1">
+              <div className="flex flex-col sm:flex-row gap-8 justify-center">
+                <button className="px-16 py-6 rounded-full bg-white text-primary font-black text-2xl hover:bg-accent hover:text-white transition-all hover:-translate-y-2 shadow-2xl">
                   Book a Strategy Call
                 </button>
-                <button className="px-12 py-5 rounded-full border-2 border-white/30 text-white font-black text-xl hover:bg-white/10 transition-all">
-                  Download Broadsheet
+                <button className="px-16 py-6 rounded-full border-4 border-white/20 text-white font-black text-2xl hover:bg-white/10 transition-all uppercase">
+                  Our Portfolio
                 </button>
               </div>
             </div>
