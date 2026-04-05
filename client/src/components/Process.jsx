@@ -1,112 +1,149 @@
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Search, Target, Palette, TrendingUp } from "lucide-react";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const ProcessStep = ({ step, index }) => {
   const isEven = index % 2 === 0;
+  const stepRef = useRef(null);
+  const textRef = useRef(null);
+  const imageRef = useRef(null);
+  const numberRef = useRef(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Reveal animation
+      gsap.fromTo(
+        [textRef.current, imageRef.current],
+        { 
+          y: 100, 
+          opacity: 0,
+          scale: 0.95
+        },
+        {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 1.2,
+          ease: "expo.out",
+          scrollTrigger: {
+            trigger: stepRef.current,
+            start: "top 85%",
+            toggleActions: "play none none reverse"
+          }
+        }
+      );
+
+      // Number floating animation
+      gsap.to(numberRef.current, {
+        y: -20,
+        duration: 3,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut"
+      });
+    }, stepRef);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <motion.div
-      initial={{ y: 50, opacity: 0 }}
-      whileInView={{ y: 0, opacity: 1 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
-      className={`flex flex-col md:flex-row items-center gap-10 md:gap-16 w-full ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'}`}
+    <div
+      ref={stepRef}
+      className={`flex flex-col md:flex-row items-center gap-10 md:gap-24 w-full ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'}`}
     >
       {/* Text Content */}
-      <div className="flex-1 w-full flex-col">
-        <div className="flex flex-col mb-6 relative">
-          <div className="text-7xl md:text-[8rem] font-bold text-[#cdeee7]/60 leading-none select-none tracking-tighter absolute -top-10 -left-6 z-0 mix-blend-multiply">
+      <div ref={textRef} className="flex-1 w-full flex-col relative z-10">
+        <div className="flex flex-col mb-8 relative">
+          <div 
+            ref={numberRef}
+            className="text-[10rem] md:text-[14rem] font-black text-primary/5 leading-none select-none tracking-tighter absolute -top-24 -left-12 z-0"
+          >
             0{step.id}
           </div>
-          <div className="flex items-center gap-4 relative z-10 mt-6 md:mt-10">
-            <div className="w-16 h-16 rounded-full bg-white shadow-[0_4px_20px_rgba(16,54,125,0.08)] flex items-center justify-center border border-background shrink-0">
+          <div className="flex items-center gap-6 relative z-10 mt-12">
+            <div className="w-20 h-20 rounded-3xl bg-white shadow-2xl flex items-center justify-center border border-primary/5 shrink-0 transition-transform hover:rotate-6">
               {step.icon}
             </div>
-            <h4 className="text-2xl md:text-3xl font-black text-[#10367d] tracking-wide uppercase">
+            <h4 className="text-3xl md:text-4xl font-black text-primary tracking-tight uppercase leading-none">
               {step.title}
             </h4>
           </div>
         </div>
-        <p className="text-[#10367d]/70 font-medium leading-relaxed text-lg md:text-xl max-w-xl">
+        <p className="text-primary/70 font-bold leading-relaxed text-xl md:text-2xl max-w-xl pl-2">
           {step.description}
         </p>
       </div>
 
       {/* Image Content */}
-      <div className="flex-1 w-full">
-        <div className="relative w-full aspect-square md:aspect-4/3 rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(16,54,125,0.1)] group">
-          <div className="absolute inset-0 bg-[#000000]/10 group-hover:bg-transparent transition-colors duration-500 z-10 pointer-events-none"></div>
+      <div ref={imageRef} className="flex-1 w-full perspective-1000">
+        <div className="relative w-full aspect-square md:aspect-[4/3] rounded-[3rem] overflow-hidden shadow-2xl group border-8 border-white/20">
+          <div className="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors duration-700 z-10 pointer-events-none"></div>
           <img 
             src={step.image} 
             alt={step.title} 
-            className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" 
+            className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-1000 ease-out" 
           />
+          <div className="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
 const Process = () => {
+  const containerRef = useRef(null);
+  
   const steps = [
     {
       id: 1,
-      title: "BUSINESS UNDERSTANDING",
-      description: "First, our graphic designers conduct in-depth research and gather details to understand your company fully. We learn about competitors and buyer personas, making notes about the pain points of the target audience.",
-      icon: <Search className="w-8 h-8 text-[#10367d]" />,
+      title: "Discovery",
+      description: "We dive deep into your brand's DNA, researching competitors and target demographics to find the unique angle that sets you apart.",
+      icon: <Search className="w-10 h-10 text-primary" />,
       image: "/images/process_business_understanding_1774860111607.png"
     },
     {
       id: 2,
-      title: "STRATEGIC PLANNING",
-      description: "Artiflix is regarded as a top creative agency for its targeted approach. Every aspect of the design, from angles to icons to aesthetics, brings out your brand's unique personality.",
-      icon: <Target className="w-8 h-8 text-[#10367d]" />,
+      title: "Strategy",
+      description: "Every pixel serves a purpose. We map out a meticulous visual strategy that aligns your brand identity with market triggers.",
+      icon: <Target className="w-10 h-10 text-primary" />,
       image: "/images/process_strategic_planning_1774860128575.png"
     },
     {
       id: 3,
-      title: "GRAPHICAL IMPLEMENTATION",
-      description: "Using top-notch tools and software, we strive to add a blazing flare of creativity to our designs. We ensure to offer a unique and captivating glimpse in every design that captures attention at a glance.",
-      icon: <Palette className="w-8 h-8 text-[#10367d]" />,
+      title: "Creation",
+      description: "Using world-class 3D and graphic tools, we mold your vision into a tangible digital masterpiece with unrivaled precision.",
+      icon: <Palette className="w-10 h-10 text-primary" />,
       image: "/images/process_graphical_implementation_1774860144546.png"
     },
     {
       id: 4,
-      title: "RESULT MEASUREMENT",
-      description: "For us, it's not only about amusing our clients, but we ponder on the ROI every design generates. That's our real achievement. We make sure our designs prove profitable and productive for your business.",
-      icon: <TrendingUp className="w-8 h-8 text-[#10367d]" />,
+      title: "Results",
+      description: "Success is measured in impact. We ensure our designs don't just look stunning, but drive engagement and measurable ROI.",
+      icon: <TrendingUp className="w-10 h-10 text-primary" />,
       image: "/images/process_result_measurement_1774860161925.png"
     }
   ];
 
   return (
-    <section className="relative w-full py-32 bg-background z-20" id="services">
+    <section ref={containerRef} className="relative w-full py-40 bg-background overflow-hidden" id="process">
       <div className="max-w-7xl mx-auto px-6">
         
         {/* Header Section */}
-        <motion.div 
-          initial={{ y: 50, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-center md:max-w-4xl mx-auto mb-20"
-        >
-          <p className="text-[#10367d]/70 font-bold leading-relaxed mb-16 text-lg max-w-3xl mx-auto">
-            You know what's the biggest perk of working with one of the most notable design agencies? It's our accuracy, efficient communication, and top-quality services. <span className="text-[#10367d] font-black">Artiflix</span> offers high-quality vector and 3D design services with a sound process to ensure perfection.
+        <div className="text-center md:max-w-4xl mx-auto mb-32">
+          <span className="text-accent font-black tracking-[0.3em] uppercase text-sm mb-4 block">Engineered for Excellence</span>
+          <h2 className="text-5xl md:text-8xl font-black text-primary tracking-tighter mb-10 leading-none">
+            OUR <span className="text-gradient">PROCESS</span>
+          </h2>
+          <p className="text-xl md:text-2xl text-primary/60 font-bold max-w-3xl mx-auto uppercase tracking-wide">
+            A meticulous journey from conceptual spark to digital reality.
           </p>
-          <div className="space-y-4">
-            <h2 className="text-4xl md:text-5xl font-black text-[#10367d] tracking-tight">
-              OUR PROCESS
-            </h2>
-            <h3 className="text-lg md:text-xl text-accent font-bold tracking-wide uppercase">
-              Turning Your Ideas Into Reality
-            </h3>
-          </div>
-        </motion.div>
+        </div>
 
         {/* Process Steps Loop */}
-        <div className="flex flex-col space-y-24 md:space-y-32 w-full mt-24">
+        <div className="flex flex-col space-y-40 md:space-y-64 w-full">
           {steps.map((step, index) => (
             <ProcessStep key={step.id} step={step} index={index} />
           ))}

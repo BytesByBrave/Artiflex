@@ -1,140 +1,181 @@
-import React, { useRef } from "react";
-import { motion, useMotionValue, useTransform, useSpring } from "framer-motion";
+import React, { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Clock, RefreshCcw, ShieldCheck, Sparkles, FileArchive, Eye, MessageSquare } from "lucide-react";
 
-const TiltFeatureCard = ({ feature, index }) => {
-  const ref = useRef(null);
-  
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
+gsap.registerPlugin(ScrollTrigger);
 
-  const mouseXSpring = useSpring(x, { stiffness: 300, damping: 30 });
-  const mouseYSpring = useSpring(y, { stiffness: 300, damping: 30 });
+const FeatureCard = ({ feature, index }) => {
+  const cardRef = useRef(null);
+  const iconRef = useRef(null);
 
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["7deg", "-7deg"]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-7deg", "7deg"]);
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Entrance animation
+      gsap.fromTo(
+        cardRef.current,
+        { 
+          y: 60, 
+          opacity: 0,
+          scale: 0.9
+        },
+        {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 1,
+          ease: "expo.out",
+          delay: index * 0.1,
+          scrollTrigger: {
+            trigger: cardRef.current,
+            start: "top 90%",
+            toggleActions: "play none none reverse"
+          }
+        }
+      );
+    }, cardRef);
 
-  const handleMouseMove = (e) => {
-    if (!ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-    x.set(mouseX / width - 0.5);
-    y.set(mouseY / height - 0.5);
+    return () => ctx.revert();
+  }, [index]);
+
+  const onMouseEnter = () => {
+    gsap.to(cardRef.current, {
+      y: -15,
+      scale: 1.02,
+      boxShadow: "0 30px 60px rgba(16,54,125,0.12)",
+      duration: 0.4,
+      ease: "power2.out"
+    });
+    gsap.to(iconRef.current, {
+      rotate: 15,
+      scale: 1.1,
+      duration: 0.4,
+      ease: "back.out(2)"
+    });
   };
 
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
+  const onMouseLeave = () => {
+    gsap.to(cardRef.current, {
+      y: 0,
+      scale: 1,
+      boxShadow: "0 10px 40px rgba(16,54,125,0.03)",
+      duration: 0.4,
+      ease: "power2.inOut"
+    });
+    gsap.to(iconRef.current, {
+      rotate: 0,
+      scale: 1,
+      duration: 0.4,
+      ease: "power2.inOut"
+    });
   };
 
   return (
-    <div style={{ perspective: "1000px" }} className={`w-full ${feature.centered ? 'lg:col-start-2' : ''}`}>
-      <motion.div
-        ref={ref}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-        initial={{ y: 50, opacity: 0 }}
-        whileInView={{ y: 0, opacity: 1 }}
-        viewport={{ once: true, margin: "-50px" }}
-        transition={{ duration: 0.8, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
-        className="relative p-8 md:p-10 rounded-[2.5rem] bg-white group shadow-[0_10px_40px_rgba(16,54,125,0.03)] hover:shadow-[0_20px_50px_rgba(116,180,218,0.15)] transition-shadow duration-500 overflow-hidden flex flex-col items-center text-center h-full border border-gray-50"
+    <div 
+      ref={cardRef}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      className={`relative p-10 rounded-[3rem] bg-white group border border-primary/5 transition-colors hover:border-accent/20 flex flex-col items-center text-center h-full ${feature.centered ? 'lg:col-start-2' : ''}`}
+    >
+      <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-[3rem]" />
+      
+      <div 
+        ref={iconRef}
+        className="relative z-10 w-24 h-24 rounded-[2rem] bg-primary/5 flex items-center justify-center mb-10 group-hover:bg-primary group-hover:text-white transition-colors duration-500 shadow-sm"
       >
-        {/* Decorative corner glow */}
-        <div className="absolute -top-24 -right-24 w-64 h-64 bg-linear-to-bl from-[#cdeee7]/60 to-transparent rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none blur-3xl"></div>
+        <feature.icon className="w-10 h-10 text-primary group-hover:text-white transition-colors" />
+      </div>
 
-        <div style={{ transform: "translateZ(50px)" }} className="relative z-10 w-16 h-16 rounded-2xl bg-[#10367d]/5 flex items-center justify-center mb-8 group-hover:scale-110 group-hover:bg-[#10367d]/10 transition-all duration-300">
-          <feature.icon className="w-8 h-8 text-[#10367d]" />
-        </div>
-
-        <div style={{ transform: "translateZ(30px)" }} className="relative z-10 flex-1 flex flex-col">
-          <h4 className="text-xl font-black text-[#10367d] mb-4 tracking-wide group-hover:text-accent transition-colors duration-500 uppercase">
-            {feature.title}
-          </h4>
-          <p className="text-[#10367d]/70 font-medium leading-relaxed text-sm md:text-base">
-            {feature.description}
-          </p>
-        </div>
-      </motion.div>
+      <div className="relative z-10">
+        <h4 className="text-2xl font-black text-primary mb-5 tracking-tight uppercase leading-tight group-hover:text-accent transition-colors">
+          {feature.title}
+        </h4>
+        <p className="text-primary/60 font-bold leading-relaxed text-base md:text-lg">
+          {feature.description}
+        </p>
+      </div>
     </div>
   );
 };
 
 const WhyChooseUs = () => {
+  const containerRef = useRef(null);
+  
   const features = [
     {
-      title: "FAST TURNAROUND TIME",
-      description: "The experts of our graphic design firm guarantee to deliver a design within the first 48 hours. We ensure to fulfill the needs of our clients and drive creativity in every design. Every aspect of the visual resonates with the customer's brand identity.",
-      icon: Clock,
-      centered: false
+      title: "Fast Turnaround",
+      description: "Our elite team guarantees initial concepts within 48 hours, ensuring your momentum never falters while maintaining absolute creative precision.",
+      icon: Clock
     },
     {
-      title: "UNLIMITED REVISIONS",
-      description: "We work till our clients are fully satisfied. So, do not worry about revisions. We value your sentiments and are committed to driving a positive change in your company's success through our services. So, feel free to share your feedback.",
-      icon: RefreshCcw,
-      centered: false
+      title: "Unlimited Iterations",
+      description: "We don't stop until it's perfect. Your satisfaction is the only metric of success we care about, offering limitless revisions on every project.",
+      icon: RefreshCcw
     },
     {
-      title: "NO HIDDEN CHARGES",
-      description: "Our tailored packages have descriptive details of our services and we do not cause inconvenience to our people. We have pre-defined roadmaps and process plans to keep our clients connected to what they will get and at what cost.",
-      icon: ShieldCheck,
-      centered: false
+      title: "Atomic Transparency",
+      description: "No hidden fees, no complex jargon. Our crystal-clear pricing and process roadmaps ensure you're always in control of your investment.",
+      icon: ShieldCheck
     },
     {
-      title: "UNIQUE DESIGNS",
-      description: "Every design has its unique identity and creative appeal. We ensure to bring out the appeal in the brand. The dedicated designers in our company are committed and passionate. They know how to incorporate a striking appeal in the design.",
-      icon: Sparkles,
-      centered: false
+      title: "Unique DNA",
+      description: "We don't do templates. Every design is surgically crafted to reflect your brand's unique soul and capture your audience's gaze instantly.",
+      icon: Sparkles
     },
     {
-      title: "COMPLETE SOURCE FILES",
-      description: "Being the owner of the design, you get the complete source file at the time of project submission. We will submit files in your desired formats to avoid causing any inconvenience for future use. You can even share your submission needs.",
-      icon: FileArchive,
-      centered: false
+      title: "Complete Ownership",
+      description: "Full source files and intellectual property rights are delivered upon completion, providing you with high-resolution assets for any future use.",
+      icon: FileArchive
     },
     {
-      title: "100% TRANSPARENCY",
-      description: "With us, you get to experience 100% transparency and sincerity. We keep our clients connected throughout the design journey. Discussing the aesthetics, sharing ideas, and bringing their vision to reality is our foremost goal.",
-      icon: Eye,
-      centered: false
+      title: "Bespoke Communication",
+      description: "A dedicated creative director is assigned to your account, ensuring a seamless bridge between your vision and our implementation.",
+      icon: Eye
     },
     {
-      title: "UNINTERRUPTED COMMUNICATION",
-      description: "We ensure to keep a sound communication with our clients. And for that we assign a dedicated designer and project manager on the project. Our clients get to interact and discuss their needs with the professionals without any barrier.",
+      title: "24/7 Synergy",
+      description: "Global support and uninterrupted communication channels keep you connected to your project's heartbeat, no matter the time zone.",
       icon: MessageSquare,
       centered: true
     }
   ];
 
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.from(".why-header > *", {
+        y: 40,
+        opacity: 0,
+        duration: 1,
+        stagger: 0.2,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: ".why-header",
+          start: "top 85%"
+        }
+      });
+    }, containerRef);
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section className="relative w-full py-32 bg-background z-20" id="why-choose-us">
+    <section ref={containerRef} className="relative w-full py-40 bg-background overflow-hidden" id="why-us">
       <div className="max-w-7xl mx-auto px-6">
         
         {/* Header Section */}
-        <motion.div 
-          initial={{ y: 50, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-center md:max-w-4xl mx-auto mb-20"
-        >
-          <div className="space-y-4 mb-8">
-            <h2 className="text-4xl md:text-5xl font-black text-[#10367d] tracking-tight uppercase">
-              WHY COUNT ON ARTIFLIX?
-            </h2>
-          </div>
-          <p className="text-[#10367d]/70 font-medium leading-relaxed text-lg max-w-3xl mx-auto">
-            <span className="text-[#10367d] font-bold">Artiflix</span> is a hub of competent and elite graphic designers. With our comprehensive range of 3D and graphic design services, we help brands with noteworthy conceptualisation and appeal. Here are some of the many reasons we can help you grow with impeccable designs.
+        <div className="why-header text-center md:max-w-4xl mx-auto mb-32">
+          <span className="text-accent font-black tracking-[0.4em] uppercase text-sm mb-6 block">The Artiflex Advantage</span>
+          <h2 className="text-5xl md:text-8xl font-black text-primary tracking-tighter mb-10 leading-[0.85]">
+            WHY <span className="text-gradient">COUNT</span> ON US?
+          </h2>
+          <p className="text-xl md:text-2xl text-primary/60 font-bold max-w-3xl mx-auto uppercase tracking-wide leading-relaxed">
+            A collective of visionaries dedicated to pushing the boundaries of what's possible in digital design.
           </p>
-        </motion.div>
+        </div>
 
         {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-12 pb-20">
           {features.map((feature, index) => (
-            <TiltFeatureCard key={index} feature={feature} index={index} />
+            <FeatureCard key={index} feature={feature} index={index} />
           ))}
         </div>
       </div>
