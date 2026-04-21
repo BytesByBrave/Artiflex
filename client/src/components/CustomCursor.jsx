@@ -71,8 +71,8 @@ const CustomCursor = () => {
     const onMouseEnter = (e) => {
         if (e.target.closest("button, a, .cursor-pointer")) {
             gsap.to(cursor, { 
-                width: 60, 
-                height: 60, 
+                width: 100, 
+                height: 100, 
                 backgroundColor: "rgba(116, 180, 218, 0.4)",
                 filter: "blur(4px)",
                 duration: 0.4 
@@ -83,8 +83,8 @@ const CustomCursor = () => {
     const onMouseLeave = (e) => {
         if (e.target.closest("button, a, .cursor-pointer")) {
             gsap.to(cursor, { 
-                width: 20, 
-                height: 20, 
+                width: 40, 
+                height: 40, 
                 backgroundColor: "#10367d",
                 filter: "blur(0px)",
                 duration: 0.4 
@@ -114,7 +114,7 @@ const CustomCursor = () => {
   return (
     <div
       ref={cursorRef}
-      className="fixed top-0 left-0 w-5 h-5 bg-primary rounded-full pointer-events-none z-[9999] hidden md:block mix-blend-multiply opacity-80"
+      className="fixed top-0 left-0 w-10 h-10 bg-primary rounded-full pointer-events-none z-[9999] hidden md:block mix-blend-multiply opacity-80"
       style={{ willChange: "transform, width, height, background-color" }}
     />
   );
